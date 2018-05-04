@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: eci32e3932sdm
+      POSTGRES_USER: atero_admin
+      POSTGRES_DB: aterodb
+    volumes:
+      - /local-dev/pg-epn-data:/var/lib/postgresql/pg-epn-data
+      - /data/postgres:/data/postgres
+    ports:
+      - "5432:5432"
+
+  manufacturer_db:
+    image: postgres:9.6.6-alpine
+    restart: unless-stopped
+    environment:
+          POSTGRES_PASSWORD: eci32e3932sdm
+          POSTGRES_USER: atero_admin
+          POSTGRES_DB: aterodb
+    volumes:
+      - /data/manufacturer_db:/data/postgres
+    ports:
+      - "5434:5432"
+

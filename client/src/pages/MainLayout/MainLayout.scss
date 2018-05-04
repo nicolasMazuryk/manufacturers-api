@@ -1,0 +1,23 @@
+.root {
+  min-height: 100vh;
+}
+
+.menu {
+  line-height: 64px;
+}
+
+.logout {
+  float: right;
+}
+
+.content {
+  display: flex;
+  padding: 15px;
+  align-items: center;
+  justify-content: center;
+  font-size: 2em;
+}
+
+.footer {
+  text-align: center;
+}
