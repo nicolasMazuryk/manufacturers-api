@@ -5,26 +5,54 @@ export default {
 export const PRODUCT_FIELDS = [
   {
     name: 'name',
-    title: 'Name',
+    title: 'Product Name',
   },
+  // {
+  //   name: 'type',
+  //   title: 'Product Type',
+  // },
   {
-    name: 'modelNumber',
+    name: 'productModelNumber',
     title: 'Model Number',
   },
   {
-    name: 'images',
-    title: 'Images',
+    name: 'description',
+    title: 'Product Description',
   },
   // {
-  //   name: 'description',
-  //   title: 'Product Description',
+  //   name: 'upc',
+  //   title: 'UPC code',
   // },
   // {
-  //   name: 'features',
-  //   title: 'Features & Benefits',
+  //   name: 'depth',
+  //   title: 'Product depth',
   // },
   // {
-  //   name: 'specifications',
-  //   title: 'Product Specifications',
+  //   name: 'width',
+  //   title: 'Product width',
+  // },
+  // {
+  //   name: 'height',
+  //   title: 'Product height',
+  // },
+  // {
+  //   name: 'unitOfMeasure',
+  //   title: 'Unit of measure',
+  // },
+  // {
+  //   name: 'shippingWeight',
+  //   title: 'Shipping Weight',
+  // },
+  // {
+  //   name: 'freightCode',
+  //   title: 'Freight code',
+  // },
+  // {
+  //   name: 'msrp',
+  //   title: 'List Price (MSRP)',
+  // },
+  // {
+  //   name: 'map',
+  //   title: 'MAP',
   // },
 ];

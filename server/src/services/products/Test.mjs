@@ -51,7 +51,7 @@ export default class Test extends Base {
     return {
       data: {
         fieldName,
-        test: result[0].value,
+        test: result.length ? result[0].value : 'NO_RESULT',
       },
     };
   }

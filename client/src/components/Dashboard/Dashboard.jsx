@@ -8,7 +8,7 @@ import { Switch, Form, Input, Row, Col, Button } from 'antd';
 
 import './Dashboard.scss';
 
-import FieldPicker from '../FieldPicker/FieldPicker';
+import FieldPicker from '../FieldPicker';
 
 export default class Dashboard extends Component {
   static propTypes = exact({
@@ -27,6 +27,7 @@ export default class Dashboard extends Component {
       isBatch: true,
       queryParams: PRODUCT_FIELDS.reduce((acc, field) => {
         acc[field.name] = {
+          name: field.name,
           params: {
             table: '',
             column: '',
@@ -37,7 +38,6 @@ export default class Dashboard extends Component {
             },
           },
           columnOptions: [],
-          test: null,
         };
         return acc;
       }, {}),
@@ -56,8 +56,6 @@ export default class Dashboard extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-
-    this.setEntityState(fieldName, entity);
     this.setState({
       tableTree: this.convertTableTreeToOptions(nextProps.tableTree),
     });
@@ -138,7 +136,7 @@ export default class Dashboard extends Component {
   render() {
     const { isBatch, tableTree, queryParams } = this.state;
     return (
-      <div>
+      <Col span={20}>
         <Row type="flex" justify="end">
           <Switch
             checked={isBatch}
@@ -148,19 +146,20 @@ export default class Dashboard extends Component {
           />
         </Row>
         {PRODUCT_FIELDS.map(field => (
-          <FieldPicker
-            key={field.title}
-            name={field.name}
-            title={field.title}
-            queryParams={queryParams[field.name]}
-            onCascaderChange={this.onCascaderChange(field.name)}
-            onSelectChange={this.onSelectChange(field.name)}
-            onConditionValueChange={this.onConditionValueChange(field.name)}
-            onTest={() => this.testQuery(field.name)}
-            tableTree={tableTree}
-          />
+          <Row key={field.title}>
+            <FieldPicker
+              name={field.name}
+              title={field.title}
+              queryParams={queryParams[field.name]}
+              onCascaderChange={this.onCascaderChange(field.name)}
+              onSelectChange={this.onSelectChange(field.name)}
+              onConditionValueChange={this.onConditionValueChange(field.name)}
+              onTest={() => this.testQuery(field.name)}
+              tableTree={tableTree}
+            />
+          </Row>
         ))}
-      </div>
+      </Col>
     );
   }
 }

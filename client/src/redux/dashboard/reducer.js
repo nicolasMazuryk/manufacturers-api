@@ -2,10 +2,10 @@ import { combineReducers } from 'redux';
 import { PRODUCT_FIELDS } from '../../config';
 import * as actions from './actions';
 
-const DEFAULT_FIELDS_STATE = PRODUCT_FIELDS.reduce(
-  (acc, { name }) => (acc[name] = { test: null }),
-  {},
-);
+const DEFAULT_FIELDS_STATE = PRODUCT_FIELDS.reduce((acc, { name }) => {
+  acc[name] = { test: null };
+  return acc;
+}, {});
 
 export default combineReducers({
   loading(state = false, action) {
@@ -42,6 +42,7 @@ export default combineReducers({
         return {
           ...state,
           [action.data.fieldName]: {
+            name: action.data.fieldName,
             test: action.data.test,
           },
         };

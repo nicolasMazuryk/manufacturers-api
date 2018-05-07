@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Cascader, Select, Input, Form, Icon, Button, Row } from 'antd';
 
+import TestViewer from '../TestViewer';
+
 import './FieldPicker.scss';
 
 export default class FieldPicker extends Component {
@@ -41,9 +43,9 @@ export default class FieldPicker extends Component {
     if (!tableTree) return null;
 
     return (
-      <div>
-        <Row>
-          <h3>{title}</h3>
+      <div styleName="FieldPicker">
+        <h5>{title}</h5>
+        <Row type="flex" justify="space-between" align="middle">
           <span>SELECT</span>
           <Cascader
             options={tableTree}
@@ -71,6 +73,10 @@ export default class FieldPicker extends Component {
             onChange={onConditionValueChange}
           />
           <Button onClick={onTest}>Test Query</Button>
+
+          <TestViewer
+            name={name}
+          />
         </Row>
       </div>
     );
