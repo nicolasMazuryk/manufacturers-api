@@ -3,7 +3,7 @@ import { createStructuredSelector } from 'reselect';
 
 import TestViewer from './TestViewer';
 
-import { fields } from '../../redux/dashboard/selectors';
+import { fields } from '../../redux/product/selectors';
 
 const selector = createStructuredSelector({
   fields,

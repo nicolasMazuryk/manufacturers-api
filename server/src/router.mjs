@@ -27,5 +27,11 @@ router.get(
 );
 
 router.post('/products/test', checkAuth, checkConnection, routes.products.test);
+router.post(
+  '/products/bulkCreate',
+  checkAuth,
+  checkConnection,
+  routes.products.bulkCreate,
+);
 
 export default router;

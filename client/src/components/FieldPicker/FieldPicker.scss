@@ -3,3 +3,14 @@
   margin-bottom: 20px;
 }
 
+.ConditionOptions {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 50%;
+
+  .ant-radio-wrapper {
+    display: flex;
+    justify-content: space-between;
+  }
+}

@@ -2,15 +2,22 @@ export default {
   apiPrefix: '/api/v1/',
 };
 
+export const conditionOptions = {
+  COLUMN: 'COLUMN',
+  FOREIGN_COLUMN: 'FOREIGN_COLUMN',
+  WHERE_VALUE: 'WHERE_VALUE',
+  CUSTOM_VALUE: 'CUSTOM_VALUE',
+};
+
 export const PRODUCT_FIELDS = [
   {
     name: 'name',
     title: 'Product Name',
   },
-  // {
-  //   name: 'type',
-  //   title: 'Product Type',
-  // },
+  {
+    name: 'type',
+    title: 'Product Type',
+  },
   {
     name: 'productModelNumber',
     title: 'Model Number',
@@ -19,40 +26,40 @@ export const PRODUCT_FIELDS = [
     name: 'description',
     title: 'Product Description',
   },
-  // {
-  //   name: 'upc',
-  //   title: 'UPC code',
-  // },
-  // {
-  //   name: 'depth',
-  //   title: 'Product depth',
-  // },
-  // {
-  //   name: 'width',
-  //   title: 'Product width',
-  // },
-  // {
-  //   name: 'height',
-  //   title: 'Product height',
-  // },
-  // {
-  //   name: 'unitOfMeasure',
-  //   title: 'Unit of measure',
-  // },
-  // {
-  //   name: 'shippingWeight',
-  //   title: 'Shipping Weight',
-  // },
-  // {
-  //   name: 'freightCode',
-  //   title: 'Freight code',
-  // },
-  // {
-  //   name: 'msrp',
-  //   title: 'List Price (MSRP)',
-  // },
-  // {
-  //   name: 'map',
-  //   title: 'MAP',
-  // },
+  {
+    name: 'upc',
+    title: 'UPC code',
+  },
+  {
+    name: 'depth',
+    title: 'Product depth',
+  },
+  {
+    name: 'width',
+    title: 'Product width',
+  },
+  {
+    name: 'height',
+    title: 'Product height',
+  },
+  {
+    name: 'unitOfMeasure',
+    title: 'Unit of measure',
+  },
+  {
+    name: 'shippingWeight',
+    title: 'Shipping Weight',
+  },
+  {
+    name: 'freightCode',
+    title: 'Freight code',
+  },
+  {
+    name: 'msrp',
+    title: 'List Price (MSRP)',
+  },
+  {
+    name: 'map',
+    title: 'MAP',
+  },
 ];

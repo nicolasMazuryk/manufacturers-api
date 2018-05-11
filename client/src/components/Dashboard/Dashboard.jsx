@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import exact from 'prop-types-exact';
 import { Link } from 'react-router-dom';
-import { PRODUCT_FIELDS } from '../../config';
+import { PRODUCT_FIELDS, conditionOptions } from '../../config';
 
-import { Switch, Form, Input, Row, Col, Button } from 'antd';
+import { Switch, Cascader, Form, Input, Row, Col, Button } from 'antd';
 
 import './Dashboard.scss';
 
@@ -17,6 +17,7 @@ export default class Dashboard extends Component {
     loading: PropTypes.bool.isRequired,
     dashboardInfo: PropTypes.func.isRequired,
     testQuery: PropTypes.func.isRequired,
+    createProduct: PropTypes.func.isRequired,
   });
 
   constructor(props) {
@@ -24,10 +25,13 @@ export default class Dashboard extends Component {
 
     this.state = {
       tableTree: [],
-      isBatch: true,
+      isGroup: true,
+      primaryTableKey: [],
       queryParams: PRODUCT_FIELDS.reduce((acc, field) => {
         acc[field.name] = {
           name: field.name,
+          columnOptions: [],
+          conditionOption: conditionOptions.COLUMN,
           params: {
             table: '',
             column: '',
@@ -35,20 +39,26 @@ export default class Dashboard extends Component {
               column: '',
               operator: '=',
               value: '',
+              foreignColumn: [],
             },
+            // customValue: '',
           },
-          columnOptions: [],
         };
         return acc;
       }, {}),
     };
 
     this.testQuery = this.testQuery.bind(this);
-    this.onBatchToggle = this.onBatchToggle.bind(this);
+    this.createProduct = this.createProduct.bind(this);
+    this.onGroupToggle = this.onGroupToggle.bind(this);
+    this.onPrimaryKeyChange = this.onPrimaryKeyChange.bind(this);
     this.onCascaderChange = this.onCascaderChange.bind(this);
+    this.onForeignCascaderChange = this.onForeignCascaderChange.bind(this);
     this.onSelectChange = this.onSelectChange.bind(this);
     this.onConditionValueChange = this.onConditionValueChange.bind(this);
     this.setEntityState = this.setEntityState.bind(this);
+    this.filter = this.filter.bind(this);
+    this.onConditionOptionChange = this.onConditionOptionChange.bind(this);
   }
 
   componentDidMount() {
@@ -74,13 +84,45 @@ export default class Dashboard extends Component {
     }));
   }
 
-  onBatchToggle(isBatch) {
-    this.setState({ isBatch });
+  onGroupToggle(isGroup) {
+    this.setState({ isGroup });
+  }
+
+  onConditionOptionChange(fieldName) {
+    return event => {
+      const value = event.target.value;
+      const entity = this.state.queryParams[fieldName];
+
+      entity.conditionOption = value;
+
+      // clear previous inputs on change
+
+      // entity.params.where.value = '';
+      // entity.params.where.foreignColumn = [];
+
+      this.setEntityState(fieldName, entity);
+    }
   }
 
   testQuery(fieldName) {
+    const isGroup = this.state.isGroup;
     const params = this.state.queryParams[fieldName].params;
-    this.props.testQuery({ fieldName, params });
+    this.props.testQuery({ fieldName, isGroup, params });
+  }
+
+  createProduct() {
+    const { isGroup, primaryTableKey, queryParams } = this.state;
+    const params = Object.keys(queryParams).map(field => {
+      return {
+        ...queryParams[field].params,
+        name: queryParams[field].name,
+      };
+    });
+    this.props.createProduct({ isGroup, primaryTableKey, params });
+  }
+
+  onPrimaryKeyChange(primaryTableKey) {
+    this.setState({ primaryTableKey })
   }
 
   onCascaderChange(fieldName) {
@@ -98,6 +140,16 @@ export default class Dashboard extends Component {
       entity.params.column = column;
       entity.params.where.column = whereColumn;
       entity.columnOptions = columnOptions;
+
+      this.setEntityState(fieldName, entity);
+    };
+  }
+
+  onForeignCascaderChange(fieldName) {
+    return (value, selectedOptions) => {
+      const entity = this.state.queryParams[fieldName];
+
+      entity.params.where.foreignColumn = value;
 
       this.setEntityState(fieldName, entity);
     };
@@ -133,32 +185,55 @@ export default class Dashboard extends Component {
     });
   }
 
+  filter(inputValue, path) {
+    return path.some(
+      option =>
+        option.label.toLowerCase().indexOf(inputValue.toLowerCase()) > -1,
+    );
+  }
+
   render() {
-    const { isBatch, tableTree, queryParams } = this.state;
+    const { isGroup, tableTree, queryParams } = this.state;
     return (
       <Col span={20}>
         <Row type="flex" justify="end">
           <Switch
-            checked={isBatch}
-            onChange={this.onBatchToggle}
+            checked={isGroup}
+            onChange={this.onGroupToggle}
             checkedChildren="Group Select"
             unCheckedChildren="Single Select"
+          />
+        </Row>
+        <Row style={{marginLeft: 400, marginRight: 400}} type="flex" justify="space-around" align="middle">
+          <h6>Primary table / key</h6>
+          <Cascader
+            options={tableTree}
+            onChange={this.onPrimaryKeyChange}
+            placeholder="e.g. product / id"
+            style={{ width: 300 }}
+            showSearch={{ filter: this.filter }}
           />
         </Row>
         {PRODUCT_FIELDS.map(field => (
           <Row key={field.title}>
             <FieldPicker
               name={field.name}
+              isGroup={isGroup}
               title={field.title}
               queryParams={queryParams[field.name]}
               onCascaderChange={this.onCascaderChange(field.name)}
+              onForeignCascaderChange={this.onForeignCascaderChange(field.name)}
               onSelectChange={this.onSelectChange(field.name)}
               onConditionValueChange={this.onConditionValueChange(field.name)}
               onTest={() => this.testQuery(field.name)}
               tableTree={tableTree}
+              onConditionOptionChange={this.onConditionOptionChange(field.name)}
             />
           </Row>
         ))}
+        <Row type="flex" justify="end">
+          <Button type="primary" onClick={this.createProduct}>Migrate All Products</Button>
+        </Row>
       </Col>
     );
   }

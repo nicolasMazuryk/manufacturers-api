@@ -1,11 +1,5 @@
 import { combineReducers } from 'redux';
-import { PRODUCT_FIELDS } from '../../config';
 import * as actions from './actions';
-
-const DEFAULT_FIELDS_STATE = PRODUCT_FIELDS.reduce((acc, { name }) => {
-  acc[name] = { test: null };
-  return acc;
-}, {});
 
 export default combineReducers({
   loading(state = false, action) {
@@ -31,21 +25,6 @@ export default combineReducers({
     switch (action.type) {
       case actions.DASHBOARD_INFO_SUCCESS:
         return action.data;
-      default:
-        return state;
-    }
-  },
-
-  fields(state = DEFAULT_FIELDS_STATE, action) {
-    switch (action.type) {
-      case actions.TEST_QUERY_SUCCESS:
-        return {
-          ...state,
-          [action.data.fieldName]: {
-            name: action.data.fieldName,
-            test: action.data.test,
-          },
-        };
       default:
         return state;
     }

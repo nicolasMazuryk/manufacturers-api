@@ -3,12 +3,10 @@ import { createStructuredSelector } from 'reselect';
 
 import Dashboard from './Dashboard';
 
-import { loading, tableTree, fields } from '../../redux/dashboard/selectors';
-import { dashboardInfo, testQuery } from '../../redux/dashboard/actions';
-// import {
-//   wsDashboardConnect,
-//   wsDashboardDisconnect,
-// } from '../../redux/websocket/actions';
+import { loading, tableTree } from '../../redux/dashboard/selectors';
+import { fields } from '../../redux/product/selectors';
+import { dashboardInfo } from '../../redux/dashboard/actions';
+import { testQuery, createProduct } from '../../redux/product/actions';
 
 const selector = createStructuredSelector({
   tableTree,
@@ -17,10 +15,9 @@ const selector = createStructuredSelector({
 });
 
 const actions = {
-  // wsDashboardConnect,
-  // wsDashboardDisconnect,
   dashboardInfo,
   testQuery,
+  createProduct,
 };
 
 export { Dashboard };

@@ -9,20 +9,32 @@ export default class Test extends Base {
         'required',
         {
           nested_object: {
-            fieldName: ['required', 'trim', 'to_lc'],
+            fieldName: ['required', 'trim'],
+            isGroup: 'boolean',
+            primaryTableKey: ['required', { list_length: 2 }],
             params: [
               'required',
               {
                 nested_object: {
-                  table: ['required', 'trim', 'to_lc'],
-                  column: ['required', 'trim', 'to_lc'],
+                  table: ['required', 'trim'],
+                  column: ['required', 'trim'],
                   where: [
                     'required',
                     {
                       nested_object: {
-                        column: ['required', 'trim', 'to_lc'],
-                        operator: ['required', 'trim', 'to_lc'],
-                        value: ['required', 'trim', 'to_lc'],
+                        column: ['required', 'trim'],
+                        operator: ['required', 'trim'],
+                        value: ['trim'],
+                        // value: {
+                        //   required_if: {
+                        //     'data/params/where/foreignColumn': [],
+                        //   },
+                        // },
+                        foreignColumn: [{ list_length: 2 }],
+                        // foreignColumn: {
+                        //   required_if: { 'data/params/where/value': '' },
+                        //   list_length: [2],
+                        // },
                       },
                     },
                   ],
@@ -35,18 +47,41 @@ export default class Test extends Base {
     };
   }
 
-  async execute({ data: { fieldName, params } }) {
+  async execute({ data: { fieldName, isGroup, params } }) {
     const sequelize = this.context.connection;
+    const schema = sequelize.options.schema;
     const { QueryTypes } = sequelize;
-    const { table, column, where } = params;
+    const { primaryTableKey, table, column, where } = params;
+    let result;
 
-    // language=POSTGRES-PSQL
-    const result = await sequelize.query(
-      `SELECT ${column} as value
-      FROM ${table}
+    if (isGroup) {
+      result = await sequelize.query(
+        `SELECT t1.${column} as value
+          FROM ${schema}.${table} as t1
+          INNER JOIN  ${schema}.${where.foreignColumn[0]} as t2
+            ON t1.${where.column} = t2.${where.foreignColumn[1]}`,
+        { type: QueryTypes.SELECT },
+
+
+      // result = await sequelize.query(
+      //   `SELECT ${schema}.${table}.${column} as value
+      // FROM ${schema}.${table}
+      // LEFT JOIN ${schema}.${where.foreignColumn[0]} ON ${schema}.${table}.${
+      //     where.column
+      //   } ${where.operator} ${schema}.${where.foreignColumn[0]}.${
+      //     where.foreignColumn[1]
+      //   }`,
+      //   { type: QueryTypes.SELECT },
+      );
+    } else {
+      // language=POSTGRES-PSQL
+      result = await sequelize.query(
+        `SELECT ${column} as value
+      FROM ${schema}.${table}
       WHERE ${where.column} ${where.operator} ${where.value}`,
-      { type: QueryTypes.SELECT },
-    );
+        { type: QueryTypes.SELECT },
+      );
+    }
 
     return {
       data: {

@@ -25,4 +25,18 @@ for (const modelName in models) {
 
 sequelize.sync();
 
+// Only for Development purposes
+import dbManager from './services/dbManager';
+dbManager.connect(
+  {
+    host: '127.0.0.1',
+    port: '5434',
+    database: 'aterodb',
+    username: 'atero_admin',
+    password: 'eci32e3932sdm',
+    schema: 'testing',
+  },
+  { id: 5 },
+);
+
 export default sequelize;

@@ -210,14 +210,12 @@ export default class Product extends Model {
     return true;
   }
 
-  static generateHash(string) {}
+  static create(product) {
 
-  static findById(id) {
-    return this.findOne({
-      where: { id,
-        // status: { [Op.ne]: this.STATUS.BLOCKED }
-      },
-    });
+  }
+
+  static bulkCreate(products) {
+    return this.bulkCreate(products);
   }
 
   static list() {
